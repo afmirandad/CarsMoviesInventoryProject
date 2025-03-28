@@ -25,7 +25,6 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> {}); // Versión sin deprecación
-
         return http.build();
     }
 
@@ -35,7 +34,6 @@ public class WebSecurityConfig {
                 .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
-
         return new InMemoryUserDetailsManager(user);
     }
 
