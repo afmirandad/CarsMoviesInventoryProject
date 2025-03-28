@@ -44,14 +44,6 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Jakarta Validation dependencies -->
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
@@ -61,7 +53,16 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>7.0.2.Final</version>
+			<version>8.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>6.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 	</dependencies>
 
