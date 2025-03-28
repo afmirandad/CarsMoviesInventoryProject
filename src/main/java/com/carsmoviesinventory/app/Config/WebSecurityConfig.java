@@ -21,10 +21,10 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/carsmovies/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> {}); // Versión sin deprecación
+
         return http.build();
     }
 
@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                 .password(passwordEncoder.encode("password"))
                 .roles("USER")
                 .build();
+
         return new InMemoryUserDetailsManager(user);
     }
 
