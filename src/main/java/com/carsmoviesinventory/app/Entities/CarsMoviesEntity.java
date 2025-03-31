@@ -1,24 +1,31 @@
 package com.carsmoviesinventory.app.Entities;
 
-import jakarta.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "CARS_MOVIES_ENTITY")
 public class CarsMoviesEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonProperty("id")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(columnDefinition = "char(36)")
     private UUID id;
 
     @JsonProperty("carMovieName")
-    @NotBlank(message = "Movie names is required")
+    @NotBlank(message = "Movie name is required")
     @Size(min = 3, max = 100, message = "Movie name must be between 3 and 100 characters")
     private String carMovieName;
 
@@ -39,17 +46,7 @@ public class CarsMoviesEntity {
         }
     }
 
-    @Override
-    public String toString() {
-        return "CarsMoviesEntity{" +
-                "id=" + id +
-                ", carMovieName='" + carMovieName + '\'' +
-                ", carMovieYear='" + carMovieYear + '\'' +
-                ", duration=" + duration +
-                '}';
-    }
-
-    public UUID getId() {
+public UUID getId() {
         return id;
     }
 
