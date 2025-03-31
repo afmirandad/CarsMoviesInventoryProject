@@ -9,6 +9,7 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "CARS_MOVIES_ENTITY")
 public class CarsMoviesEntity {
 
     @Id
