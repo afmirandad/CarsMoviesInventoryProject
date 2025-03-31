@@ -17,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/carsmovies")
 @Validated
-public class CarsMoviesController{
+public class CarsMoviesController {
 
     private final CarsMoviesService carsMoviesService;
 
@@ -27,33 +27,32 @@ public class CarsMoviesController{
 
     @GetMapping
     public ResponseEntity<?> getAllCarsMovies(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size,
-        @RequestParam(defaultValue = "carMovieName,asc") String[] sort) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "carMovieName,asc") String sort) {
         try {
-                Pageable pageable = PageRequest.of(page, size, Sort.by(parseSort(sort)));
-                return carsMoviesService.getAllMovies(pageable);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body("Invalid sorting direction. Use 'asc' or 'desc'.");
+            // Separamos el string recibido en dos partes: campo y dirección.
+            String[] sortParams = sort.split(",");
+            if(sortParams.length < 2){
+                throw new IllegalArgumentException("El parámetro 'sort' debe tener el formato 'campo,direccion'.");
             }
+            Pageable pageable = PageRequest.of(page, size, Sort.by(parseSort(sortParams)));
+            return carsMoviesService.getAllMovies(pageable);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid sorting direction. Use 'asc' or 'desc'.");
         }
+    }
 
-    private Sort.Order parseSort(String[] sort) {
-        if (sort.length < 2) {
-            throw new IllegalArgumentException("Sort parameter must have both field and direction (e.g., 'carMovieYear,desc').");
-        }
-
-        String property = sort[0];
-        String direction = sort[1].toLowerCase();
+    private Sort.Order parseSort(String[] sortParams) {
+        String property = sortParams[0];
+        String direction = sortParams[1].toLowerCase();
 
         List<String> validDirections = Arrays.asList("asc", "desc");
         if (!validDirections.contains(direction)) {
             throw new IllegalArgumentException("Invalid sort direction. Use 'asc' or 'desc'.");
         }
-
         return new Sort.Order(Sort.Direction.fromString(direction), property);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCarsMovieById(@PathVariable UUID id){
@@ -65,9 +64,10 @@ public class CarsMoviesController{
             @RequestParam String movieName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "carMovieName,asc") String[] sort) {
+            @RequestParam(defaultValue = "carMovieName,asc") String sort) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(parseSort(sort)));
+        String[] sortParams = sort.split(",");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(parseSort(sortParams)));
         return carsMoviesService.getMoviesByName(movieName, pageable);
     }
 
@@ -78,17 +78,11 @@ public class CarsMoviesController{
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCarsMovie(@PathVariable UUID id, @Valid @RequestBody CarsMoviesEntity carsMoviesEntity){
-        return carsMoviesService.updateMovie(id,carsMoviesEntity);
+        return carsMoviesService.updateMovie(id, carsMoviesEntity);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCarsMovie(@PathVariable UUID id){
         return carsMoviesService.deleteMovie(id);
     }
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World";
-    }
-
 }
