@@ -21,9 +21,9 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                .httpBasic(httpBasic -> {}); // Versión sin deprecación
+                .httpBasic(httpBasic -> {});
 
         return http.build();
     }
