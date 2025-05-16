@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/carsmovies")
+@CrossOrigin(origins = "*")
 @Validated
 public class CarsMoviesController{
 
